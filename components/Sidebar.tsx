@@ -1,27 +1,24 @@
 'use client';
 
 import React from 'react';
-import { NavTab } from '@/types/finance';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { LogOut } from 'lucide-react';
 
-interface SidebarProps {
-  activeTab: NavTab;
-  setActiveTab: (tab: NavTab) => void;
-}
+export const Sidebar = () => {
+  const pathname = usePathname();
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => {
-  const menuItems: { id: NavTab; label: string }[] = [
-    { id: 'dashboard', label: 'แดชบอร์ด' },
-    { id: 'transfers', label: 'รายการโอนเงิน' },
-    { id: 'requests', label: 'คำขอจ่ายเงิน' },
-    { id: 'pay-cycles', label: 'รอบการจ่ายเงิน' },
-    { id: 'reports', label: 'รายงาน' },
+  const menuItems = [
+    { href: '/dashboard', label: 'แดชบอร์ด' },
+    { href: '/transfers', label: 'รายการโอนเงิน' },
+    { href: '/requests', label: 'คำขอจ่ายเงิน' },
+    { href: '/pay-cycles', label: 'รอบการจ่ายเงิน' },
+    { href: '/reports', label: 'รายงาน' },
   ];
 
   return (
     <aside className="w-72 bg-[#061A14] text-white min-h-screen flex flex-col justify-between p-6 select-none shrink-0">
       <div>
-        {/* Brand Header */}
         <div className="flex items-center gap-3 mb-10">
           <div className="w-10 h-10 bg-[#D4A359] text-black font-semibold rounded-lg flex items-center justify-center text-lg">
             AF
@@ -32,14 +29,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
           </div>
         </div>
 
-        {/* Navigation Links */}
         <nav className="space-y-2">
           {menuItems.map((item) => {
-            const isActive = activeTab === item.id;
+            const isActive = pathname === item.href;
             return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
+              <Link
+                key={item.href}
+                href={item.href}
                 className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg text-sm font-medium transition-all relative ${
                   isActive
                     ? 'bg-[#122A22] text-white font-semibold'
@@ -50,13 +46,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
                   <span className="absolute left-0 top-2 bottom-2 w-1.5 bg-[#D4A359] rounded-r-md" />
                 )}
                 <span>{item.label}</span>
-              </button>
+              </Link>
             );
           })}
         </nav>
       </div>
 
-      {/* User Profile */}
       <div className="pt-4 border-t border-[#122A22] flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-[#D4A359] rounded-lg flex items-center justify-center text-black font-semibold">
@@ -67,7 +62,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab }) => 
             <p className="text-xs text-gray-400">AF</p>
           </div>
         </div>
-        <button className="text-gray-400 hover:text-white p-1">
+        <button onClick={() => alert('ออกจากระบบ')} className="text-gray-400 hover:text-white p-1">
           <LogOut className="w-5 h-5" />
         </button>
       </div>
